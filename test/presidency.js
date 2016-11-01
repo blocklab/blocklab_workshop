@@ -1,3 +1,7 @@
+var balanceInEth = function(account) {
+  return web3.fromWei(web3.eth.getBalance(account), 'ether').toNumber();
+};
+
 contract('Presidency', function(accounts) {
 
   var oscarTheOracle = accounts[0];
@@ -47,6 +51,30 @@ contract('Presidency', function(accounts) {
   it('sets the contract creator as an oracle', function() {
     return contract.oracle.call().then(function(oracle) {
       assert.equal(oracle, oscarTheOracle);
+    });
+  });
+
+  it.skip('can be resolved by the oracle', function() {
+    return contract.resolve(TRUMP_PICK, {
+      from: oscarTheOracle
+    });
+  });
+
+  it.skip('gives the contract contents to the winner', function() {
+    var balanceBeforePayout = balanceInEth(bobForHillary);
+    return contract.resolve(HILLARY_PICK, {
+      from: oscarTheOracle
+    }).then(function() {
+      assert.equal(balanceBeforePayout + 20, balanceInEth(bobForHillary));
+    });
+  });
+
+  it('gives the contract contents to the winner', function() {
+    var balanceBeforePayout = balanceInEth(aliceForTrump);
+    return contract.resolve(TRUMP_PICK, {
+      from: oscarTheOracle
+    }).then(function() {
+      assert.equal(balanceBeforePayout + 20, balanceInEth(aliceForTrump));
     });
   });
 });

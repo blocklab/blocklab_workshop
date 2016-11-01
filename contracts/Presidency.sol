@@ -21,4 +21,16 @@ contract Presidency {
       throw;
     }
   }
+
+  function resolve(uint winner) {
+    if (winner == 0) {
+      if (!hillaryBet.send(this.balance)) {
+        throw;
+      }
+    } else if (winner == 1) {
+      if (!trumpBet.send(this.balance)) {
+        throw;
+      }
+    }
+  }
 }
