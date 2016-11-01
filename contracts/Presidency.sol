@@ -3,10 +3,15 @@ pragma solidity ^0.4.2;
 contract Presidency {
 
   address public trumpBet;
+  address public hillaryBet;
 
   function bet(uint pick) payable {
     if (msg.value == 10000000000000000000) {
-      trumpBet = msg.sender;
+      if (pick == 1) {
+        trumpBet = msg.sender;
+      } else if (pick == 0) {
+        hillaryBet = msg.sender;
+      }
     } else {
       throw;
     }

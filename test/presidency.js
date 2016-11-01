@@ -5,6 +5,7 @@ contract('Presidency', function(accounts) {
   var contract;
 
   var TRUMP_PICK = 1;
+  var HILLARY_PICK = 0;
 
   beforeEach(function() {
     contract = Presidency.deployed();
@@ -14,6 +15,17 @@ contract('Presidency', function(accounts) {
     return contract.bet(TRUMP_PICK, {
       from: alice,
       value: web3.toWei(10, 'ether')
+    });
+  });
+
+  it('accepts bets on hillary', function() {
+    return contract.bet(HILLARY_PICK, {
+      from: bob,
+      value: web3.toWei(10, 'ether')
+    }).then(function() {
+      contract.hillaryBet.call().then(function(better) {
+        assert.equal(better, bob);
+      })
     });
   });
 
